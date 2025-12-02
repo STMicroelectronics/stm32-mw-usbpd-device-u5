@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -37,13 +36,13 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMARxInstance(uint8_t PortNum)
   /* Enable the clock */
   UCPDDMA_INSTANCE0_CLOCKENABLE_RX;
 
-  LL_DMA_ConfigDataTransfer(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX,
-                            LL_DMA_SINC_NOINCREMENT     |
-                            LL_DMA_DINC_INCREMENT       |
-                            LL_DMA_SRC_DATAWIDTH_BYTE   |
-                            LL_DMA_DEST_DATAWIDTH_BYTE);
+  LL_DMA_ConfigTransfer(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX,
+                        LL_DMA_SRC_FIXED            |
+                        LL_DMA_DEST_INCREMENT       |
+                        LL_DMA_SRC_DATAWIDTH_BYTE   |
+                        LL_DMA_DEST_DATAWIDTH_BYTE);
 
-  LL_DMA_SetHardwareRequest(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX, UCPDDMA_INSTANCE0_REQUEST_RX);
+  LL_DMA_SetPeriphRequest(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX, UCPDDMA_INSTANCE0_REQUEST_RX);
 
   return UCPDDMA_INSTANCE0_CHANNEL_RX;
 }
@@ -58,13 +57,13 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMATxInstance(uint8_t PortNum)
   /* Enable the clock */
   UCPDDMA_INSTANCE0_CLOCKENABLE_TX;
 
-  LL_DMA_ConfigDataTransfer(UCPDDMA_INSTANCE0_DMA_TX, (uint32_t)UCPDDMA_INSTANCE0_LL_CHANNEL_TX,
-                        LL_DMA_SINC_INCREMENT        |
-                        LL_DMA_DINC_NOINCREMENT      |
-                        LL_DMA_SRC_DATAWIDTH_BYTE    |
+  LL_DMA_ConfigTransfer(UCPDDMA_INSTANCE0_DMA_TX, (uint32_t)UCPDDMA_INSTANCE0_LL_CHANNEL_TX,
+                        LL_DMA_SRC_INCREMENT        |
+                        LL_DMA_DEST_FIXED           |
+                        LL_DMA_SRC_DATAWIDTH_BYTE   |
                         LL_DMA_DEST_DATAWIDTH_BYTE);
 
-  LL_DMA_SetHardwareRequest(UCPDDMA_INSTANCE0_DMA_TX, UCPDDMA_INSTANCE0_LL_CHANNEL_TX, UCPDDMA_INSTANCE0_REQUEST_TX);
+  LL_DMA_SetPeriphRequest(UCPDDMA_INSTANCE0_DMA_TX, UCPDDMA_INSTANCE0_LL_CHANNEL_TX, UCPDDMA_INSTANCE0_REQUEST_TX);
   UCPDDMA_INSTANCE0_CHANNEL_TX->CTR2 |= DMA_CTR2_DREQ;
 
   return UCPDDMA_INSTANCE0_CHANNEL_TX;
@@ -97,6 +96,4 @@ void USBPD_HW_SetFRSSignalling(uint8_t PortNum, uint8_t cc)
     UCPDFRS_INSTANCE0_FRSCC2;
   }
 }
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
